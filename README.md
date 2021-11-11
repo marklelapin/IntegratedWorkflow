@@ -1,2 +1,2 @@
 # IntegratedWorkflow
-A system for integrating databases to workflow events form them.
+A workflow and document management system created by Mark Carter
