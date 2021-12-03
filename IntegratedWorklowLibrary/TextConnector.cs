@@ -4,9 +4,9 @@ using System.Text;
 
 namespace IntegratedWorklowLibrary
 {
-    public class SQLConnector : IDataConnection
+    public class TextConnector : IDataConnection
     {
-        // TODO - Make SQL Connection Work to Create DocumentProcess
+        // TODO - Make Text Connection Work to create Document Process
         /// <summary>
         /// Saves a new DocumentProcess to the database
         /// </summary>
@@ -15,10 +15,7 @@ namespace IntegratedWorklowLibrary
         public DocumentProcessModel CreateDocumentProcess(DocumentProcessModel model)
         {
             model.ID = 1;
-
             return model;
         }
-
-      
     }
 }

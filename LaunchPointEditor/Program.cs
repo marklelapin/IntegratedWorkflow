@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DocumentProcessEditor
+namespace LaunchPointEditor
 {
     static class Program
     {
@@ -17,11 +17,7 @@ namespace DocumentProcessEditor
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            //Initialize Data connection
-            IntegratedWorklowLibrary.GlobalConfig.InitializeConnections(true, true);
-
-            Application.Run(new DocumentProcessEditor());
+            Application.Run(new Form1());
         }
     }
 }

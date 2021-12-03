@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntegratedWorklowLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,10 +17,87 @@ namespace DocumentProcessEditor
         {
             InitializeComponent();
         }
+        
+        private void CreateNewButton_Click(object sender, EventArgs e)
+        {
+            SelectedDocumentProcessID.Text = "New";
+            DocumentProcessNameTextBox.Text = "Enter Name";
+            IsActiveCheckBox.Checked = true;
 
-        private void label3_Click(object sender, EventArgs e)
+            //TODO - update objects list box to nothing (if update of binding doesn't clear it)
+            List<string> MyObjectsList = new List<string>();
+            MyObjectsList.Add("Update Objects Associated With "+SelectedDocumentProcessID.Text);
+            ObjectListBox.DataSource = MyObjectsList;
+
+            //TODO - update access list bo box to nothing (if update of binding doesn't clear it)
+            List<string> MyAccessList = new List<string>();
+            MyAccessList.Add("Update Access Entities Associated With " + SelectedDocumentProcessID.Text);
+            AccessListBox.DataSource = MyAccessList;
+
+            //TODO - update launchpoints list box to nothing (if update of binding doesn't clear it)
+            List<string> MyLPList = new List<string>();
+            MyLPList.Add("Update LaunchPoints Associated With " + SelectedDocumentProcessID.Text);
+            LaunchPointsListBox.DataSource = MyLPList;
+        }
+
+        private void SaveChangesButton_Click(object sender, EventArgs e)
         {
 
+            if (ValidateForm())
+            {
+                DocumentProcessNameErrorMessage.Visible = false;
+                DocumentProcessNameErrorMessage.Text = "";
+
+                MessageBox.Show("New Document Process Saved");
+
+                DocumentProcessModel model = new DocumentProcessModel(SelectedDocumentProcessID.Text,
+                                                                    DocumentProcessNameTextBox.Text,
+                                                                    IsActiveCheckBox.Checked);
+                //TODO - update DocumentProcessObjects
+                //TODO - update  DocumentProcessAccess
+                //TODO - update Docuement ProcessLaunchPoints
+
+                //Clear the selected Document Process section of 
+                IsActiveCheckBox.Checked = false;
+                ObjectListBox.DataSource = null;
+                AccessListBox.DataSource = null;
+                LaunchPointsListBox.DataSource = null;
+                SelectedDocumentProcessID.Text = "---";
+                DocumentProcessNameTextBox.Text = "";
+                
+                //TODO - deselect document process list
+            }
+            else
+            {
+                MessageBox.Show("Errors Exists - Changes weren't saved.");
+            }
+            ;
+
+            bool ValidateForm()
+            {
+                bool output = true;
+
+                if (DocumentProcessNameTextBox.TextLength == 0)
+                {
+                    DocumentProcessNameErrorMessage.Text = "Name can't be blank!";
+                    output = false;
+                };
+
+                if (DocumentProcessNameTextBox.Text == "Enter Name")
+                {
+                    DocumentProcessNameErrorMessage.Text = "You need to enter a new name!";
+                    DocumentProcessNameErrorMessage.Visible = true;
+                    output = false;
+                };
+
+                return output;
+            }
+
+        }
+
+        private void SearchTextbox_TextChanged(object sender, EventArgs e)
+        {
+            //TODO -- update documentprocess listbox
         }
     }
 }
