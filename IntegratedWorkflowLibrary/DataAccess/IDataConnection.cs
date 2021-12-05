@@ -1,8 +1,9 @@
-﻿using System;
+﻿using IntegratedWorkflowLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntegratedWorklowLibrary
+namespace IntegratedWorkflowLibrary.DataAccess
 {
     public interface IDataConnection
     {

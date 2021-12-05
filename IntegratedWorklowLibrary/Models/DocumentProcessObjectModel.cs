@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntegratedWorklowLibrary
+namespace IntegratedWorklowLibrary.Models
 {
     public class DocumentProcessObjectModel
     {

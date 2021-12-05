@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegratedWorklowLibrary", "IntegratedWorklowLibrary\IntegratedWorklowLibrary.csproj", "{619E751D-5FCE-46A4-99FA-2C83356D2771}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentProcessEditor", "DocumentProcessEditor\DocumentProcessEditor.csproj", "{D2F6FE3F-FF69-442F-982F-135E8DF75519}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegratedWorkflowLibrary", "IntegratedWorkflowLibrary\IntegratedWorkflowLibrary.csproj", "{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{619E751D-5FCE-46A4-99FA-2C83356D2771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{619E751D-5FCE-46A4-99FA-2C83356D2771}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{619E751D-5FCE-46A4-99FA-2C83356D2771}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{619E751D-5FCE-46A4-99FA-2C83356D2771}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2F6FE3F-FF69-442F-982F-135E8DF75519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2F6FE3F-FF69-442F-982F-135E8DF75519}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2F6FE3F-FF69-442F-982F-135E8DF75519}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2F6FE3F-FF69-442F-982F-135E8DF75519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

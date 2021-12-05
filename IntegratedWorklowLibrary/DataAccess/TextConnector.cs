@@ -1,8 +1,9 @@
-﻿using System;
+﻿using IntegratedWorklowLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntegratedWorklowLibrary
+namespace IntegratedWorklowLibrary.DataAccess
 {
     public class TextConnector : IDataConnection
     {

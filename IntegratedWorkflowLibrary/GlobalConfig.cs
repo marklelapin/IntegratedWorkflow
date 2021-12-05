@@ -1,17 +1,15 @@
-﻿using IntegratedWorklowLibrary.DataAccess;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Text;
 
-namespace IntegratedWorklowLibrary
+namespace IntegratedWorkflowLibrary
 {
     public static class GlobalConfig
     {
         public static List<IDataConnection> Connections { get; private set; } = new List<IDataConnection>();
 
 
-        public static void InitializeConnections (bool database, bool textFiles)
+        public static void InitializeConnections(bool database, bool textFiles)
         {
             if (database)
             {
@@ -26,10 +24,9 @@ namespace IntegratedWorklowLibrary
             }
         }
 
-        public static string CnnString (string name)
+        public static string CnnString(string name)
         {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
     }
-
 }
