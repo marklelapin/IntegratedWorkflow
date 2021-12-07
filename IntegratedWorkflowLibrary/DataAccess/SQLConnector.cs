@@ -2,13 +2,14 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
+using Dapper;
 
 namespace IntegratedWorkflowLibrary.DataAccess
 {
     public class SQLConnector : IDataConnection
     {
-        // TODO - Make SQL Connection Work to Create DocumentProcess
         /// <summary>
         /// Saves a new DocumentProcess to the database
         /// </summary>
@@ -16,26 +17,28 @@ namespace IntegratedWorkflowLibrary.DataAccess
         /// <returns>The Documment Process ID.</returns>
         public DocumentProcessModel CreateDocumentProcess(DocumentProcessModel model)
         {
-            using (SqlConnection con = new SqlConnection("IntegratedWorkflow"))
+            var dp = new DynamicParameters();
+
+            using (IDbConnection connection = new SqlConnection(IntegratedWorkflowLibrary.GlobalConfig.CnnString))
             {
-                SqlCommand cmd = new SqlCommand("SP_COUNTRY_GET_LIST", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    listCountryModel.Add(new CountryModel
-                    {
-                        Id = Convert.ToInt32(rdr[0]),
-                        Country = rdr[1].ToString(),
-                        Active = Convert.ToBoolean(rdr[2])
-                    });
-                }
+                dp.Add("@Title", model.Title);
+                dp.Add("IsACtive", model.IsActive);
+                dp.Add("@AccessInformation", model.AccessInformation);
+                dp.Add("@ObjectInformation", model.ObjectInformation);
+                dp.Add("@LaunchPointInformation", model.ObjectInformation);
+                dp.Add("@ID", 0, dbType: DbType.Int32, direction: ParameterDirection.Output); //returns the newly created ID from spDocumentProcessCreate
+
+                connection.Execute("dbo.spDocumentProcessCreate", dp, commandType: CommandType.StoredProcedure);
+
+                model.ID = dp.Get<int>("@ID");
+
+                return model;
             }
         }
+
 
     }
 
 
 }
-}
+

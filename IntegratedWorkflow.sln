@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentProcessEditor", "DocumentProcessEditor\DocumentProcessEditor.csproj", "{D2F6FE3F-FF69-442F-982F-135E8DF75519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegratedWorkflowLibrary", "IntegratedWorkflowLibrary\IntegratedWorkflowLibrary.csproj", "{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegratedWorkflowLibrary", "IntegratedWorkflowLibrary\IntegratedWorkflowLibrary.csproj", "{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

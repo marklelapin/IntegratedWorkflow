@@ -1,5 +1,7 @@
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,10 +20,21 @@ namespace DocumentProcessEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Initialize Data connection
-            IntegratedWorklowLibrary.GlobalConfig.InitializeConnections(true, true);
+            //Finds ConnectionString from applications.json
+            IntegratedWorkflowLibrary.GlobalConfig.InitializeConnectionString();
+           
+           //Initialize Data connection
+           IntegratedWorkflowLibrary.GlobalConfig.InitializeConnections(true, true);
 
             Application.Run(new DocumentProcessEditor());
         }
+
+         
+
+            //TODO work out whats going on with development environment and appsettings
+            //.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            //.AddEnvironmentVariables#
     }
+        
 }
+

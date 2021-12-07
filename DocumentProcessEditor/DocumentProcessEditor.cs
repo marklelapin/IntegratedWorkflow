@@ -1,5 +1,7 @@
-﻿using IntegratedWorklowLibrary;
-using IntegratedWorklowLibrary.Models;
+﻿
+using IntegratedWorkflowLibrary;
+using IntegratedWorkflowLibrary.DataAccess;
+using IntegratedWorkflowLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,15 +51,25 @@ namespace DocumentProcessEditor
                 DocumentProcessNameErrorMessage.Visible = false;
                 DocumentProcessNameErrorMessage.Text = "";
 
-                MessageBox.Show("New Document Process Saved");
+                
 
-                DocumentProcessModel model = new DocumentProcessModel(SelectedDocumentProcessID.Text,
+                DocumentProcessModel model = new DocumentProcessModel(
+                                                                    SelectedDocumentProcessID.Text,
                                                                     DocumentProcessNameTextBox.Text,
-                                                                    IsActiveCheckBox.Checked);
-                //TODO - update DocumentProcessObjects
-                //TODO - update  DocumentProcessAccess
-                //TODO - update Docuement ProcessLaunchPoints
+                                                                    IsActiveCheckBox.Checked,
+                                                                    "",//TODO - add in access information from acces listbox
+                                                                    "",//TODO - add in object json from object listbox
+                                                                    ""//TODO - add in launchpoint info from lp listbox
+                                                                    );
 
+                foreach (IDataConnection db in GlobalConfig.Connections)
+                {
+                    db.CreateDocumentProcess(model);
+                }
+
+
+                MessageBox.Show("New Document Process Saved. "+model.ID + ": "+ model.Title);
+                
                 //Clear the selected Document Process section of 
                 IsActiveCheckBox.Checked = false;
                 ObjectListBox.DataSource = null;

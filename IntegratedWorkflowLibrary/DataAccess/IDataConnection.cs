@@ -7,6 +7,6 @@ namespace IntegratedWorkflowLibrary.DataAccess
 {
     public interface IDataConnection
     {
-        DocumentProcessModel CreateDocumentProcess(DocumentProcessModel model);
+     DocumentProcessModel  CreateDocumentProcess(DocumentProcessModel model);
     }
 }
