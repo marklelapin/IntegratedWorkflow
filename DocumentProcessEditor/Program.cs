@@ -1,3 +1,4 @@
+using IntegratedWorkflowLibrary;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace DocumentProcessEditor
             IntegratedWorkflowLibrary.GlobalConfig.InitializeConnectionString();
            
            //Initialize Data connection
-           IntegratedWorkflowLibrary.GlobalConfig.InitializeConnections(true, true);
+           IntegratedWorkflowLibrary.GlobalConfig.InitializeConnection(DatabaseTypes.Sql);
 
             Application.Run(new DocumentProcessEditor());
         }

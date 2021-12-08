@@ -62,9 +62,8 @@ namespace DocumentProcessEditor
                                                                     ""//TODO - add in launchpoint info from lp listbox
                                                                     );
 
-                foreach (IDataConnection db in GlobalConfig.Connections)
-                {
-                    db.CreateDocumentProcess(model);
+                GlobalConfig.Connection.CreateDocumentProcess(model);               {
+                   
                 }
 
 
