@@ -5,9 +5,9 @@ using System.Text;
 
 namespace IntegratedWorkflowLibrary.DataAccess
 {
-    public class TextConnector : IDataConnection
+    public class TextConnector //TODO add back in : IDataConnection TODO: add back in Interface if using text files in future
     {
-        // TODO - Make Text Connection Work to create Document Process
+        // TODO - Make Text Connection Work to create Document Process 6:50 of https://www.youtube.com/watch?v=wfWxdh-_k_4&t=23644s
         /// <summary>
         /// Saves a new DocumentProcess to the database
         /// </summary>

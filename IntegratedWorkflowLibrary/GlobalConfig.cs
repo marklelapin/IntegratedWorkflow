@@ -12,17 +12,22 @@ namespace IntegratedWorkflowLibrary
         public static IDataConnection Connection { get; private set; }
          public static void InitializeConnection(DatabaseTypes db)
         {
-            if (db == DatabaseTypes.Sql)
+
+            switch (db)
             {
-                SQLConnector sql = new SQLConnector();
-                Connection = sql;
+                case DatabaseTypes.Sql:
+                    SQLConnector sql = new SQLConnector();
+                    Connection = sql;
+                        break;
+                case DatabaseTypes.Text:
+                    TextConnector text = new TextConnector();
+                    //Connection = text; //TODO add back in teh Connection = text if text connection work done.
+                        break;
+                default:
+                    break;
             }
 
-            else if (db == DatabaseTypes.Text)
-            {
-                TextConnector text = new TextConnector();
-                Connection = text;
-            }
+
         }
 
 

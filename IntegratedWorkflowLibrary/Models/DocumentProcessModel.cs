@@ -35,6 +35,13 @@ namespace IntegratedWorkflowLibrary.Models
         /// </summary>
         public string ObjectInformation { get; set; }
 
+        public string DisplayName
+        {
+            get
+            {
+                return $"{Title} ({ID})";
+            }
+        }
         public DocumentProcessModel()
         {
 

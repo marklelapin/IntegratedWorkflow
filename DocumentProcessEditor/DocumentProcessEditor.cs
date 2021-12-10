@@ -16,11 +16,73 @@ namespace DocumentProcessEditor
 {
     public partial class DocumentProcessEditor : Form
     {
+        /// <summary>
+        /// The currently selected DocumentProcessID
+        /// </summary>
+        public int documentProcessID = 0;
+        /// <summary>
+      /// The current Launch Points that should appear in the Listbox
+      /// </summary>
+        private List<LaunchPointModel> LaunchPoints = new List<LaunchPointModel>();
+       /// <summary>
+       /// The current Access Entities that should appear in the Listbox
+       /// </summary>
+        private List<AccessEntityModel> AccessEntities = new List<AccessEntityModel>();
+        /// <summary>
+        /// The current Document Process Objects that should appear in the Listbox
+        /// </summary>
+        private List<DocumentProcessObjectModel> DocumentProcessObjects = new List<DocumentProcessObjectModel>();
+
+        private string searchText = "";
+
+        private bool activeOnly = true;
+       
+
+        
+
         public DocumentProcessEditor()
         {
             InitializeComponent();
+
+            updateDocumentProcessListBox();
+            updateListBoxesFromDataConnection();
+
         }
-        
+        /// <summary>
+        /// Resets listboxes with data from database
+        /// </summary>
+        private void updateListBoxesFromDataConnection()
+        {
+            LaunchPoints = GlobalConfig.Connection.GetDocumentProcessLaunchPoints(documentProcessID); //TODO add DocumentProcessID from selected document Process
+            AccessEntities = GlobalConfig.Connection.GetDocumentProcessAccessEntities(documentProcessID);
+            DocumentProcessObjects = GlobalConfig.Connection.GetDocumentProcessObjects(documentProcessID);
+
+            LaunchPointsListBox.DataSource = LaunchPoints;
+            LaunchPointsListBox.DisplayMember = "Title";
+                            
+            AccessListBox.DataSource = AccessEntities;
+            AccessListBox.DisplayMember = "DisplayName";
+
+            ObjectListBox.DataSource = DocumentProcessObjects;
+            ObjectListBox.DisplayMember= "DisplayName";
+        }
+
+        /// <summary>
+        /// Updates the Document Process List Box using text from Search box
+        /// </summary>
+        private void updateDocumentProcessListBox()
+        {
+            DocumentProcessListBox.DataSource = GlobalConfig.Connection.SearchDocumentProcesses(searchText, activeOnly);
+            DocumentProcessListBox.DisplayMember = "DisplayName";
+        }
+        private void updateListboxes()
+        {
+     
+            ObjectListBox.DataSource = LaunchPoints;
+
+        }
+
+
         private void CreateNewButton_Click(object sender, EventArgs e)
         {
             SelectedDocumentProcessID.Text = "New";
@@ -41,6 +103,8 @@ namespace DocumentProcessEditor
             List<string> MyLPList = new List<string>();
             MyLPList.Add("Update LaunchPoints Associated With " + SelectedDocumentProcessID.Text);
             LaunchPointsListBox.DataSource = MyLPList;
+
+            updateDocumentProcessListBox();
         }
 
         private void SaveChangesButton_Click(object sender, EventArgs e)
@@ -107,9 +171,27 @@ namespace DocumentProcessEditor
 
         }
 
-        private void SearchTextbox_TextChanged(object sender, EventArgs e)
+        //TODO - public void AddLaunchPointButton_Click(object sender, EventArgs e)
+        //{
+        //    //LaunchPointSetup form = new LaunchPointSetup();
+        //    //AddedLaunchPoints = new List<LaunchPointModel>(); //this will be used to pass parameters back in.
+        //    //form.Show();
+        //    //LaunchPoints.AddRange(AddedLaunchPoints);
+            
+            
+
+        //}
+
+        private void ActiveOnlyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            //TODO -- update documentprocess listbox
+            activeOnly = ActiveOnlyCheckBox.Checked;
+            updateDocumentProcessListBox();
+        }
+
+        private void SearchTextbox_KeyUp(object sender, KeyEventArgs e)
+        {
+            searchText = SearchTextbox.Text;
+            updateDocumentProcessListBox();
         }
     }
 }
