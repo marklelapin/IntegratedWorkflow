@@ -44,7 +44,10 @@ namespace IntegratedWorkflowLibrary.Models
         }
         public DocumentProcessModel()
         {
-
+            //defaults the following values to zero when a new model is created
+            ID = 0;
+            Title = "Enter Name";
+            IsActive = true; 
         }
         public DocumentProcessModel(string iD, string title, bool isActive,string accessInformation,string objectInformation,string launcPointInformation)
         {

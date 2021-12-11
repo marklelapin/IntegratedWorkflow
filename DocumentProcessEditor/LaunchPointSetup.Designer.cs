@@ -48,6 +48,7 @@ namespace DocumentProcessEditor
             this.LaunchPointListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.LaunchPointListBox.Size = new System.Drawing.Size(274, 364);
             this.LaunchPointListBox.TabIndex = 0;
+           
             // 
             // CreateButton
             // 

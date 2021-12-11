@@ -19,7 +19,7 @@ namespace DocumentProcessEditor
         /// <summary>
         /// The currently selected DocumentProcessID
         /// </summary>
-        public int documentProcessID = 0;
+        public DocumentProcessModel SelectedDocumentProcess = new DocumentProcessModel();
         /// <summary>
       /// The current Launch Points that should appear in the Listbox
       /// </summary>
@@ -45,27 +45,53 @@ namespace DocumentProcessEditor
             InitializeComponent();
 
             updateDocumentProcessListBox();
-            updateListBoxesFromDataConnection();
+            updateRightHandSideFromDataConnection();
 
         }
         /// <summary>
         /// Resets listboxes with data from database
         /// </summary>
-        private void updateListBoxesFromDataConnection()
+        private void updateRightHandSideFromDataConnection()
         {
-            LaunchPoints = GlobalConfig.Connection.GetDocumentProcessLaunchPoints(documentProcessID); //TODO add DocumentProcessID from selected document Process
-            AccessEntities = GlobalConfig.Connection.GetDocumentProcessAccessEntities(documentProcessID);
-            DocumentProcessObjects = GlobalConfig.Connection.GetDocumentProcessObjects(documentProcessID);
+            LaunchPoints = GlobalConfig.Connection.GetDocumentProcessLaunchPoints(SelectedDocumentProcess.ID);
+            AccessEntities = GlobalConfig.Connection.GetDocumentProcessAccessEntities(SelectedDocumentProcess.ID);
+            DocumentProcessObjects = GlobalConfig.Connection.GetDocumentProcessObjects(SelectedDocumentProcess.ID);
 
+            updateLaunchPointsListBox();
+
+            updateAccessListBox();
+
+            updateObjectListBox();
+
+            SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
+            DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
+            IsActiveCheckBox.Checked = SelectedDocumentProcess.IsActive;
+            DocumentProcessNameErrorMessage.Text = "";
+        }
+
+
+        private void updateLaunchPointsListBox()
+        {
+            LaunchPointsListBox.DataSource = null;
             LaunchPointsListBox.DataSource = LaunchPoints;
             LaunchPointsListBox.DisplayMember = "Title";
-                            
+        }
+
+
+        private void updateAccessListBox()
+        {
+            AccessListBox.DataSource = null;
             AccessListBox.DataSource = AccessEntities;
             AccessListBox.DisplayMember = "DisplayName";
-
-            ObjectListBox.DataSource = DocumentProcessObjects;
-            ObjectListBox.DisplayMember= "DisplayName";
         }
+
+        private void updateObjectListBox()
+        {
+            ObjectListBox.DataSource = null;
+            ObjectListBox.DataSource = DocumentProcessObjects;
+            ObjectListBox.DisplayMember = "DisplayName";
+        }
+
 
         /// <summary>
         /// Updates the Document Process List Box using text from Search box
@@ -75,36 +101,12 @@ namespace DocumentProcessEditor
             DocumentProcessListBox.DataSource = GlobalConfig.Connection.SearchDocumentProcesses(searchText, activeOnly);
             DocumentProcessListBox.DisplayMember = "DisplayName";
         }
-        private void updateListboxes()
-        {
-     
-            ObjectListBox.DataSource = LaunchPoints;
-
-        }
-
+       
 
         private void CreateNewButton_Click(object sender, EventArgs e)
         {
-            SelectedDocumentProcessID.Text = "New";
-            DocumentProcessNameTextBox.Text = "Enter Name";
-            IsActiveCheckBox.Checked = true;
-
-            //TODO - update objects list box to nothing (if update of binding doesn't clear it)
-            List<string> MyObjectsList = new List<string>();
-            MyObjectsList.Add("Update Objects Associated With "+SelectedDocumentProcessID.Text);
-            ObjectListBox.DataSource = MyObjectsList;
-
-            //TODO - update access list bo box to nothing (if update of binding doesn't clear it)
-            List<string> MyAccessList = new List<string>();
-            MyAccessList.Add("Update Access Entities Associated With " + SelectedDocumentProcessID.Text);
-            AccessListBox.DataSource = MyAccessList;
-
-            //TODO - update launchpoints list box to nothing (if update of binding doesn't clear it)
-            List<string> MyLPList = new List<string>();
-            MyLPList.Add("Update LaunchPoints Associated With " + SelectedDocumentProcessID.Text);
-            LaunchPointsListBox.DataSource = MyLPList;
-
-            updateDocumentProcessListBox();
+            SelectedDocumentProcess = new DocumentProcessModel();
+            updateRightHandSideFromDataConnection();   
         }
 
         private void SaveChangesButton_Click(object sender, EventArgs e)
@@ -118,7 +120,7 @@ namespace DocumentProcessEditor
                 
 
                 DocumentProcessModel model = new DocumentProcessModel(
-                                                                    SelectedDocumentProcessID.Text,
+                                                                    SelectedDocumentProcessIDLabel.Text,
                                                                     DocumentProcessNameTextBox.Text,
                                                                     IsActiveCheckBox.Checked,
                                                                     "",//TODO - add in access information from acces listbox
@@ -133,15 +135,7 @@ namespace DocumentProcessEditor
 
                 MessageBox.Show("New Document Process Saved. "+model.ID + ": "+ model.Title);
                 
-                //Clear the selected Document Process section of 
-                IsActiveCheckBox.Checked = false;
-                ObjectListBox.DataSource = null;
-                AccessListBox.DataSource = null;
-                LaunchPointsListBox.DataSource = null;
-                SelectedDocumentProcessID.Text = "---";
-                DocumentProcessNameTextBox.Text = "";
-                
-                //TODO - deselect document process list
+                updateDocumentProcessListBox();
             }
             else
             {
@@ -151,35 +145,35 @@ namespace DocumentProcessEditor
 
             bool ValidateForm()
             {
-                bool output = true;
-
-                if (DocumentProcessNameTextBox.TextLength == 0)
-                {
-                    DocumentProcessNameErrorMessage.Text = "Name can't be blank!";
-                    output = false;
-                };
-
-                if (DocumentProcessNameTextBox.Text == "Enter Name")
-                {
-                    DocumentProcessNameErrorMessage.Text = "You need to enter a new name!";
-                    DocumentProcessNameErrorMessage.Visible = true;
-                    output = false;
-                };
-
-                return output;
+                return ValidateName();
             }
 
         }
 
-        //TODO - public void AddLaunchPointButton_Click(object sender, EventArgs e)
-        //{
-        //    //LaunchPointSetup form = new LaunchPointSetup();
-        //    //AddedLaunchPoints = new List<LaunchPointModel>(); //this will be used to pass parameters back in.
-        //    //form.Show();
-        //    //LaunchPoints.AddRange(AddedLaunchPoints);
+             
             
-            
+        private bool ValidateName()
+        {
+            bool output = true;
 
+            if (DocumentProcessNameTextBox.TextLength == 0)
+            {
+                DocumentProcessNameErrorMessage.Text = "Name can't be blank";
+                output = false;
+            };
+
+            if (DocumentProcessNameTextBox.Text == "Enter Name")
+            {
+                DocumentProcessNameErrorMessage.Text = "You need to enter a new name!";
+                output = false;
+            };
+
+            if (output == true)
+            {
+                DocumentProcessNameErrorMessage.Text = "";
+            }
+            return output;
+        }
         //}
 
         private void ActiveOnlyCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -192,6 +186,44 @@ namespace DocumentProcessEditor
         {
             searchText = SearchTextbox.Text;
             updateDocumentProcessListBox();
+        }
+
+        private void DocumentProcessListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedDocumentProcess = (DocumentProcessModel)DocumentProcessListBox.SelectedItem;
+            DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
+            SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
+            updateRightHandSideFromDataConnection();
+        }
+
+        private void DocumentProcessNameTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            ValidateName();
+        }
+
+        private void CancelChangesButton_Click(object sender, EventArgs e)
+        {
+            updateRightHandSideFromDataConnection();
+        }
+
+        private void AddLaunchPointButton_Click(object sender, EventArgs e)
+        {
+            LaunchPointSetup childForm = new LaunchPointSetup();
+            childForm.ShowDialog();
+                            
+            LaunchPoints.AddRange(childForm.SelectedLaunchPoints);
+
+            updateLaunchPointsListBox();
+
+        }
+
+        private void RemoveLaunchPointButton_Click(object sender, EventArgs e)
+        {
+            LaunchPointModel selectedLaunchPoint = (LaunchPointModel)LaunchPointsListBox.SelectedItem;
+
+            LaunchPoints.Remove(selectedLaunchPoint);
+
+            updateLaunchPointsListBox();
         }
     }
 }

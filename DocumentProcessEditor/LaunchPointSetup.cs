@@ -13,9 +13,8 @@ namespace DocumentProcessEditor
 {
     public partial class LaunchPointSetup : Form
     {
-        //private List<LaunchPointModel> launchPoints = GlobalConfig.Connection.GetLaunchPoints();
-
        
+        public List<LaunchPointModel> SelectedLaunchPoints = new List<LaunchPointModel>();
 
         public LaunchPointSetup()
         {
@@ -24,6 +23,7 @@ namespace DocumentProcessEditor
             PopulateList();
         }
 
+        
        
         private void PopulateList()
         {
@@ -44,8 +44,6 @@ namespace DocumentProcessEditor
         }
 
         
-
-
         private bool ValidateLaunchPointCreation()
         {
             bool validation = true;
@@ -72,9 +70,16 @@ namespace DocumentProcessEditor
             this.Close();
         }
 
-        private void AddButton_Click(object sender, EventArgs e)
+        public void AddButton_Click(object sender, EventArgs e)
         {
+            foreach (LaunchPointModel item in LaunchPointListBox.SelectedItems)
+            {
+                SelectedLaunchPoints.Add(item);
+            }
 
+            this.Hide();
+            
         }
-    }
+
+     }
 }

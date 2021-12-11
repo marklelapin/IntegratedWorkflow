@@ -42,7 +42,7 @@ namespace DocumentProcessEditor
             this.AccessLabel = new System.Windows.Forms.Label();
             this.DocumentProcessGroup = new System.Windows.Forms.GroupBox();
             this.DocumentProcessNameErrorMessage = new System.Windows.Forms.Label();
-            this.SelectedDocumentProcessID = new System.Windows.Forms.Label();
+            this.SelectedDocumentProcessIDLabel = new System.Windows.Forms.Label();
             this.CancelChangesButton = new System.Windows.Forms.Button();
             this.LaunchPointsLabel = new System.Windows.Forms.Label();
             this.SaveChangesButton = new System.Windows.Forms.Button();
@@ -69,12 +69,13 @@ namespace DocumentProcessEditor
             AddLaunchPointButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             AddLaunchPointButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             AddLaunchPointButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            AddLaunchPointButton.Location = new System.Drawing.Point(461, 252);
+            AddLaunchPointButton.Location = new System.Drawing.Point(528, 252);
             AddLaunchPointButton.Name = "AddLaunchPointButton";
             AddLaunchPointButton.Size = new System.Drawing.Size(44, 23);
             AddLaunchPointButton.TabIndex = 20;
             AddLaunchPointButton.Text = "Add";
             AddLaunchPointButton.UseVisualStyleBackColor = false;
+            AddLaunchPointButton.Click += new System.EventHandler(this.AddLaunchPointButton_Click);
             // 
             // RemoveLaunchPointButton
             // 
@@ -83,12 +84,13 @@ namespace DocumentProcessEditor
             RemoveLaunchPointButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             RemoveLaunchPointButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             RemoveLaunchPointButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            RemoveLaunchPointButton.Location = new System.Drawing.Point(511, 252);
+            RemoveLaunchPointButton.Location = new System.Drawing.Point(579, 252);
             RemoveLaunchPointButton.Name = "RemoveLaunchPointButton";
             RemoveLaunchPointButton.Size = new System.Drawing.Size(61, 23);
             RemoveLaunchPointButton.TabIndex = 26;
             RemoveLaunchPointButton.Text = "Remove";
             RemoveLaunchPointButton.UseVisualStyleBackColor = false;
+            RemoveLaunchPointButton.Click += new System.EventHandler(this.RemoveLaunchPointButton_Click);
             // 
             // RemoveAccessEntityButton
             // 
@@ -97,7 +99,7 @@ namespace DocumentProcessEditor
             RemoveAccessEntityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             RemoveAccessEntityButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             RemoveAccessEntityButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            RemoveAccessEntityButton.Location = new System.Drawing.Point(511, 75);
+            RemoveAccessEntityButton.Location = new System.Drawing.Point(579, 75);
             RemoveAccessEntityButton.Name = "RemoveAccessEntityButton";
             RemoveAccessEntityButton.Size = new System.Drawing.Size(61, 23);
             RemoveAccessEntityButton.TabIndex = 27;
@@ -127,6 +129,7 @@ namespace DocumentProcessEditor
             this.DocumentProcessListBox.Name = "DocumentProcessListBox";
             this.DocumentProcessListBox.Size = new System.Drawing.Size(281, 378);
             this.DocumentProcessListBox.TabIndex = 0;
+            this.DocumentProcessListBox.SelectedIndexChanged += new System.EventHandler(this.DocumentProcessListBox_SelectedIndexChanged);
             // 
             // TitleLabel
             // 
@@ -189,7 +192,7 @@ namespace DocumentProcessEditor
             this.DocumentProcessGroup.Controls.Add(RemoveAccessEntityButton);
             this.DocumentProcessGroup.Controls.Add(RemoveLaunchPointButton);
             this.DocumentProcessGroup.Controls.Add(this.DocumentProcessNameErrorMessage);
-            this.DocumentProcessGroup.Controls.Add(this.SelectedDocumentProcessID);
+            this.DocumentProcessGroup.Controls.Add(this.SelectedDocumentProcessIDLabel);
             this.DocumentProcessGroup.Controls.Add(this.CancelChangesButton);
             this.DocumentProcessGroup.Controls.Add(this.AccessLabel);
             this.DocumentProcessGroup.Controls.Add(this.LaunchPointsLabel);
@@ -207,7 +210,7 @@ namespace DocumentProcessEditor
             this.DocumentProcessGroup.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.DocumentProcessGroup.Location = new System.Drawing.Point(311, 9);
             this.DocumentProcessGroup.Name = "DocumentProcessGroup";
-            this.DocumentProcessGroup.Size = new System.Drawing.Size(576, 460);
+            this.DocumentProcessGroup.Size = new System.Drawing.Size(652, 460);
             this.DocumentProcessGroup.TabIndex = 10;
             this.DocumentProcessGroup.TabStop = false;
             this.DocumentProcessGroup.Text = "Selected Document Process: ";
@@ -224,15 +227,15 @@ namespace DocumentProcessEditor
             this.DocumentProcessNameErrorMessage.Text = "Error Message";
             this.DocumentProcessNameErrorMessage.Visible = false;
             // 
-            // SelectedDocumentProcessID
+            // SelectedDocumentProcessIDLabel
             // 
-            this.SelectedDocumentProcessID.AutoSize = true;
-            this.SelectedDocumentProcessID.Location = new System.Drawing.Point(539, 1);
-            this.SelectedDocumentProcessID.Name = "SelectedDocumentProcessID";
-            this.SelectedDocumentProcessID.Size = new System.Drawing.Size(27, 20);
-            this.SelectedDocumentProcessID.TabIndex = 24;
-            this.SelectedDocumentProcessID.Text = "---";
-            this.SelectedDocumentProcessID.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.SelectedDocumentProcessIDLabel.AutoSize = true;
+            this.SelectedDocumentProcessIDLabel.Location = new System.Drawing.Point(600, 0);
+            this.SelectedDocumentProcessIDLabel.Name = "SelectedDocumentProcessIDLabel";
+            this.SelectedDocumentProcessIDLabel.Size = new System.Drawing.Size(27, 20);
+            this.SelectedDocumentProcessIDLabel.TabIndex = 24;
+            this.SelectedDocumentProcessIDLabel.Text = "---";
+            this.SelectedDocumentProcessIDLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // CancelChangesButton
             // 
@@ -240,13 +243,14 @@ namespace DocumentProcessEditor
             this.CancelChangesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CancelChangesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelChangesButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CancelChangesButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CancelChangesButton.Location = new System.Drawing.Point(453, 424);
+            this.CancelChangesButton.ForeColor = System.Drawing.Color.Red;
+            this.CancelChangesButton.Location = new System.Drawing.Point(501, 424);
             this.CancelChangesButton.Name = "CancelChangesButton";
             this.CancelChangesButton.Size = new System.Drawing.Size(102, 25);
             this.CancelChangesButton.TabIndex = 17;
             this.CancelChangesButton.Text = "Cancel Changes";
             this.CancelChangesButton.UseVisualStyleBackColor = false;
+            this.CancelChangesButton.Click += new System.EventHandler(this.CancelChangesButton_Click);
             // 
             // LaunchPointsLabel
             // 
@@ -263,8 +267,8 @@ namespace DocumentProcessEditor
             this.SaveChangesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.SaveChangesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SaveChangesButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.SaveChangesButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.SaveChangesButton.Location = new System.Drawing.Point(327, 424);
+            this.SaveChangesButton.ForeColor = System.Drawing.Color.Lime;
+            this.SaveChangesButton.Location = new System.Drawing.Point(377, 424);
             this.SaveChangesButton.Name = "SaveChangesButton";
             this.SaveChangesButton.Size = new System.Drawing.Size(102, 25);
             this.SaveChangesButton.TabIndex = 16;
@@ -276,14 +280,15 @@ namespace DocumentProcessEditor
             // 
             this.DocumentProcessNameTextBox.Location = new System.Drawing.Point(6, 26);
             this.DocumentProcessNameTextBox.Name = "DocumentProcessNameTextBox";
-            this.DocumentProcessNameTextBox.Size = new System.Drawing.Size(477, 27);
+            this.DocumentProcessNameTextBox.Size = new System.Drawing.Size(545, 27);
             this.DocumentProcessNameTextBox.TabIndex = 18;
+            this.DocumentProcessNameTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DocumentProcessNameTextBox_KeyUp);
             // 
             // IsActiveCheckBox
             // 
             this.IsActiveCheckBox.AutoSize = true;
             this.IsActiveCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.IsActiveCheckBox.Location = new System.Drawing.Point(489, 26);
+            this.IsActiveCheckBox.Location = new System.Drawing.Point(557, 28);
             this.IsActiveCheckBox.Name = "IsActiveCheckBox";
             this.IsActiveCheckBox.Size = new System.Drawing.Size(83, 24);
             this.IsActiveCheckBox.TabIndex = 23;
@@ -293,7 +298,7 @@ namespace DocumentProcessEditor
             // DocumentProcessIDLabel
             // 
             this.DocumentProcessIDLabel.AutoSize = true;
-            this.DocumentProcessIDLabel.Location = new System.Drawing.Point(498, 1);
+            this.DocumentProcessIDLabel.Location = new System.Drawing.Point(557, 0);
             this.DocumentProcessIDLabel.Name = "DocumentProcessIDLabel";
             this.DocumentProcessIDLabel.Size = new System.Drawing.Size(46, 20);
             this.DocumentProcessIDLabel.TabIndex = 21;
@@ -307,7 +312,7 @@ namespace DocumentProcessEditor
             this.LaunchPointsListBox.ItemHeight = 17;
             this.LaunchPointsListBox.Location = new System.Drawing.Point(306, 278);
             this.LaunchPointsListBox.Name = "LaunchPointsListBox";
-            this.LaunchPointsListBox.Size = new System.Drawing.Size(266, 140);
+            this.LaunchPointsListBox.Size = new System.Drawing.Size(334, 140);
             this.LaunchPointsListBox.TabIndex = 19;
             // 
             // AddAccessEntityButton
@@ -317,7 +322,7 @@ namespace DocumentProcessEditor
             this.AddAccessEntityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddAccessEntityButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.AddAccessEntityButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.AddAccessEntityButton.Location = new System.Drawing.Point(461, 75);
+            this.AddAccessEntityButton.Location = new System.Drawing.Point(528, 75);
             this.AddAccessEntityButton.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.AddAccessEntityButton.Name = "AddAccessEntityButton";
             this.AddAccessEntityButton.Size = new System.Drawing.Size(44, 23);
@@ -347,7 +352,7 @@ namespace DocumentProcessEditor
             this.AccessListBox.ItemHeight = 17;
             this.AccessListBox.Location = new System.Drawing.Point(306, 101);
             this.AccessListBox.Name = "AccessListBox";
-            this.AccessListBox.Size = new System.Drawing.Size(266, 140);
+            this.AccessListBox.Size = new System.Drawing.Size(334, 140);
             this.AccessListBox.TabIndex = 11;
             // 
             // CreateNewDocumentProcessButton
@@ -384,7 +389,7 @@ namespace DocumentProcessEditor
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(896, 480);
+            this.ClientSize = new System.Drawing.Size(975, 476);
             this.Controls.Add(this.DocumentProcessListBox);
             this.Controls.Add(this.ActiveOnlyCheckBox);
             this.Controls.Add(this.CreateNewDocumentProcessButton);
@@ -424,7 +429,7 @@ namespace DocumentProcessEditor
         private System.Windows.Forms.Label DocumentProcessIDLabel;
         private System.Windows.Forms.TextBox DocumentProcessNameTextBox;
         private System.Windows.Forms.CheckBox IsActiveCheckBox;
-        private System.Windows.Forms.Label SelectedDocumentProcessID;
+        private System.Windows.Forms.Label SelectedDocumentProcessIDLabel;
         private System.Windows.Forms.Label DocumentProcessNameErrorMessage;
         private System.Windows.Forms.CheckBox ActiveOnlyCheckBox;
     }
