@@ -20,7 +20,6 @@ namespace IntegratedWorkflowLibrary.Models
         /// in Json format. e.g. [ {"LaunchPointID" : 1},{"LaunchPointID" : 2} ]
         /// </summary>
         public string LaunchPointInformation { get; set; }
-
         /// <summary>
         /// Contains access entities associated with Document Process
         /// in Json format. e.g. [ { "AccessEntityTypeID": 1, "AccessEntity" : "Engineering", "AccessTypeID" : 2},
@@ -49,7 +48,7 @@ namespace IntegratedWorkflowLibrary.Models
             Title = "Enter Name";
             IsActive = true; 
         }
-        public DocumentProcessModel(string iD, string title, bool isActive,string accessInformation,string objectInformation,string launcPointInformation)
+        public DocumentProcessModel(string iD, string title, bool isActive,string accessInformation,string objectInformation,string launchPointInformation)
         {
             int iDValue = 0;
             int.TryParse(iD, out iDValue);
@@ -59,7 +58,7 @@ namespace IntegratedWorkflowLibrary.Models
             IsActive = isActive;
             AccessInformation = accessInformation;
             ObjectInformation = objectInformation;
-            LaunchPointInformation = launcPointInformation;
+            LaunchPointInformation = launchPointInformation;
 
         }
     }

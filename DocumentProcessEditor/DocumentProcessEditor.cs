@@ -43,7 +43,10 @@ namespace DocumentProcessEditor
         /// The index int the DocumentProcessListbox most recently selected
         /// </summary>
         private int currentDocumentProcessIndex = 1;
-        
+        /// <summary>
+        /// signals whether the DocumentProcess ListBox is in the process of updating and there doesn't wnat the select change event to occur.
+        /// </summary>
+        private bool updateListBoxInProgress = false;
 
         public DocumentProcessEditor()
         {
@@ -104,8 +107,11 @@ namespace DocumentProcessEditor
         /// </summary>
         private void updateDocumentProcessListBox()
         {
+      
             DocumentProcessListBox.DataSource = GlobalConfig.Connection.SearchDocumentProcesses(searchText, activeOnly);
             DocumentProcessListBox.DisplayMember = "DisplayName";
+           
+            
         }
        
 
@@ -123,33 +129,8 @@ namespace DocumentProcessEditor
                 DocumentProcessNameErrorMessage.Visible = false;
                 DocumentProcessNameErrorMessage.Text = "";
 
-                var jsonAccessInformation = JsonSerializer.Serialize(AccessRules);
-                var jsonLaunchPointInformation = JsonSerializer.Serialize(LaunchPoints);
-
-               
-                DocumentProcessModel model = new DocumentProcessModel(
-                                                                SelectedDocumentProcessIDLabel.Text,
-                                                                DocumentProcessNameTextBox.Text,
-                                                                IsActiveCheckBox.Checked,
-                                                                jsonAccessInformation,//TODO - add in access information from acces listbox
-                                                                "",//TODO - add in object json from object listbox
-                                                                jsonLaunchPointInformation//TODO - add in launchpoint info from lp listbox
-                                                                );
-
-                if (SelectedDocumentProcessIDLabel.Text == "0") //New DocumentProcess
-                    {
-                       GlobalConfig.Connection.CreateDocumentProcess(model);               
-                        MessageBox.Show("New Document Process Saved. " + model.ID + ": " + model.Title);
-                    }
-                 else
-                    {
-                        GlobalConfig.Connection.UpdateDocumentProcess(model);
-                        MessageBox.Show("Document Process Updated.");
-                    };
-
-                
-                
-                updateDocumentProcessListBox();
+                SaveChanges();
+          
             }
             else
             {
@@ -204,7 +185,32 @@ namespace DocumentProcessEditor
 
         private void SaveChanges()
         {
-            ///TODO Save Changes 
+            var jsonAccessInformation = JsonSerializer.Serialize(AccessRules);
+            var jsonLaunchPointInformation = JsonSerializer.Serialize(LaunchPoints);
+
+            DocumentProcessModel model = new DocumentProcessModel(
+                                                            SelectedDocumentProcessIDLabel.Text,
+                                                            DocumentProcessNameTextBox.Text,
+                                                            IsActiveCheckBox.Checked,
+                                                            jsonAccessInformation,//TODO - add in access information from acces listbox
+                                                            "[]",//TODO - add in object json from object listbox
+                                                            jsonLaunchPointInformation//TODO - add in launchpoint info from lp listbox
+                                                            );
+
+            if (SelectedDocumentProcessIDLabel.Text == "0") //New DocumentProcess
+            {
+                GlobalConfig.Connection.CreateDocumentProcess(model);
+                MessageBox.Show("New Document Process Saved. " + model.ID + ": " + model.Title);
+                changesMade = false;
+            }
+            else
+            {
+                GlobalConfig.Connection.UpdateDocumentProcess(model);
+                MessageBox.Show("Document Process Updated.");
+            };
+
+            
+           
         }
 
         private void DocumentProcessListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -235,7 +241,7 @@ namespace DocumentProcessEditor
                currentDocumentProcessIndex = DocumentProcessListBox.SelectedIndex;
                DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
                SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
-               
+            updateListBoxInProgress = false;
                 updateRightHandSideFromDataConnection();
         }
                      
@@ -286,7 +292,7 @@ namespace DocumentProcessEditor
             AccessSetup childForm = new AccessSetup();
             childForm.ShowDialog();
 
-            if (childForm.SelectedAccessType.ID != null)
+            if (!(string.IsNullOrEmpty(childForm.SelectedAccessType.Title)))
             {
             //  This section is needed as couldn't great a parametised constructor for AccessRuleModel as Dapper didn't like it when getting accessrulemodel from sql
             AccessRuleModel newAccessRule = new AccessRuleModel();
@@ -298,7 +304,6 @@ namespace DocumentProcessEditor
             newAccessRule.AccessEntityName = childForm.SelectedAccessEntity.Name;
 
             AccessRules.Add(newAccessRule);
-
 
             updateAccessRulesListBox();
             
