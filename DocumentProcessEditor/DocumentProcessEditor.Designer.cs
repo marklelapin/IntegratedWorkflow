@@ -39,7 +39,7 @@ namespace DocumentProcessEditor
             this.SearchTextbox = new System.Windows.Forms.TextBox();
             this.Objects = new System.Windows.Forms.Label();
             this.SeachLabel = new System.Windows.Forms.Label();
-            this.AccessLabel = new System.Windows.Forms.Label();
+            this.AccessRulesLabel = new System.Windows.Forms.Label();
             this.DocumentProcessGroup = new System.Windows.Forms.GroupBox();
             this.DocumentProcessNameErrorMessage = new System.Windows.Forms.Label();
             this.SelectedDocumentProcessIDLabel = new System.Windows.Forms.Label();
@@ -52,7 +52,7 @@ namespace DocumentProcessEditor
             this.LaunchPointsListBox = new System.Windows.Forms.ListBox();
             this.AddAccessEntityButton = new System.Windows.Forms.Button();
             this.AddObjectButton = new System.Windows.Forms.Button();
-            this.AccessListBox = new System.Windows.Forms.ListBox();
+            this.AccessRulesListBox = new System.Windows.Forms.ListBox();
             this.CreateNewDocumentProcessButton = new System.Windows.Forms.Button();
             this.ActiveOnlyCheckBox = new System.Windows.Forms.CheckBox();
             AddLaunchPointButton = new System.Windows.Forms.Button();
@@ -105,6 +105,7 @@ namespace DocumentProcessEditor
             RemoveAccessEntityButton.TabIndex = 27;
             RemoveAccessEntityButton.Text = "Remove";
             RemoveAccessEntityButton.UseVisualStyleBackColor = false;
+            RemoveAccessEntityButton.Click += new System.EventHandler(this.RemoveAccessEntityButton_Click);
             // 
             // RemoveObjectButton
             // 
@@ -177,14 +178,14 @@ namespace DocumentProcessEditor
             this.SeachLabel.TabIndex = 8;
             this.SeachLabel.Text = "Search:";
             // 
-            // AccessLabel
+            // AccessRulesLabel
             // 
-            this.AccessLabel.AutoSize = true;
-            this.AccessLabel.Location = new System.Drawing.Point(306, 78);
-            this.AccessLabel.Name = "AccessLabel";
-            this.AccessLabel.Size = new System.Drawing.Size(53, 20);
-            this.AccessLabel.TabIndex = 9;
-            this.AccessLabel.Text = "Access";
+            this.AccessRulesLabel.AutoSize = true;
+            this.AccessRulesLabel.Location = new System.Drawing.Point(306, 78);
+            this.AccessRulesLabel.Name = "AccessRulesLabel";
+            this.AccessRulesLabel.Size = new System.Drawing.Size(92, 20);
+            this.AccessRulesLabel.TabIndex = 9;
+            this.AccessRulesLabel.Text = "Access Rules";
             // 
             // DocumentProcessGroup
             // 
@@ -194,7 +195,7 @@ namespace DocumentProcessEditor
             this.DocumentProcessGroup.Controls.Add(this.DocumentProcessNameErrorMessage);
             this.DocumentProcessGroup.Controls.Add(this.SelectedDocumentProcessIDLabel);
             this.DocumentProcessGroup.Controls.Add(this.CancelChangesButton);
-            this.DocumentProcessGroup.Controls.Add(this.AccessLabel);
+            this.DocumentProcessGroup.Controls.Add(this.AccessRulesLabel);
             this.DocumentProcessGroup.Controls.Add(this.LaunchPointsLabel);
             this.DocumentProcessGroup.Controls.Add(this.SaveChangesButton);
             this.DocumentProcessGroup.Controls.Add(this.DocumentProcessNameTextBox);
@@ -204,7 +205,7 @@ namespace DocumentProcessEditor
             this.DocumentProcessGroup.Controls.Add(this.LaunchPointsListBox);
             this.DocumentProcessGroup.Controls.Add(this.AddAccessEntityButton);
             this.DocumentProcessGroup.Controls.Add(this.AddObjectButton);
-            this.DocumentProcessGroup.Controls.Add(this.AccessListBox);
+            this.DocumentProcessGroup.Controls.Add(this.AccessRulesListBox);
             this.DocumentProcessGroup.Controls.Add(this.Objects);
             this.DocumentProcessGroup.Controls.Add(this.ObjectListBox);
             this.DocumentProcessGroup.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -329,6 +330,7 @@ namespace DocumentProcessEditor
             this.AddAccessEntityButton.TabIndex = 14;
             this.AddAccessEntityButton.Text = "Add";
             this.AddAccessEntityButton.UseVisualStyleBackColor = false;
+            this.AddAccessEntityButton.Click += new System.EventHandler(this.AddAccessEntityButton_Click);
             // 
             // AddObjectButton
             // 
@@ -344,16 +346,16 @@ namespace DocumentProcessEditor
             this.AddObjectButton.Text = "Add";
             this.AddObjectButton.UseVisualStyleBackColor = false;
             // 
-            // AccessListBox
+            // AccessRulesListBox
             // 
-            this.AccessListBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.AccessListBox.FormattingEnabled = true;
-            this.AccessListBox.HorizontalScrollbar = true;
-            this.AccessListBox.ItemHeight = 17;
-            this.AccessListBox.Location = new System.Drawing.Point(306, 101);
-            this.AccessListBox.Name = "AccessListBox";
-            this.AccessListBox.Size = new System.Drawing.Size(334, 140);
-            this.AccessListBox.TabIndex = 11;
+            this.AccessRulesListBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.AccessRulesListBox.FormattingEnabled = true;
+            this.AccessRulesListBox.HorizontalScrollbar = true;
+            this.AccessRulesListBox.ItemHeight = 17;
+            this.AccessRulesListBox.Location = new System.Drawing.Point(306, 101);
+            this.AccessRulesListBox.Name = "AccessRulesListBox";
+            this.AccessRulesListBox.Size = new System.Drawing.Size(334, 140);
+            this.AccessRulesListBox.TabIndex = 11;
             // 
             // CreateNewDocumentProcessButton
             // 
@@ -416,13 +418,13 @@ namespace DocumentProcessEditor
         private System.Windows.Forms.TextBox SearchTextbox;
         private System.Windows.Forms.Label Objects;
         private System.Windows.Forms.Label SeachLabel;
-        private System.Windows.Forms.Label AccessLabel;
+        private System.Windows.Forms.Label AccessRulesLabel;
         private System.Windows.Forms.GroupBox DocumentProcessGroup;
         private System.Windows.Forms.Button CancelChangesButton;
         private System.Windows.Forms.Button SaveChangesButton;
         private System.Windows.Forms.Button AddAccessEntityButton;
         private System.Windows.Forms.Button AddObjectButton;
-        private System.Windows.Forms.ListBox AccessListBox;
+        private System.Windows.Forms.ListBox AccessRulesListBox;
         private System.Windows.Forms.Button CreateNewDocumentProcessButton;
         private System.Windows.Forms.ListBox LaunchPointsListBox;
         private System.Windows.Forms.Label LaunchPointsLabel;

@@ -18,7 +18,17 @@ namespace IntegratedWorkflowLibrary.Models
         /// Boolean used to hide 'deleted' Launch Points
         /// </summary>
         public bool IsActive { get; set; }
-    
+  
+        public string DisplayName
+        {
+            get
+            {
+                return $"{Title} ({ID})";
+            }
+        }
+
+      
+
         /// <summary>
         /// the data required for a Launch Point
         /// </summary>

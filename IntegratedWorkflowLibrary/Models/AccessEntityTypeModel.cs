@@ -9,10 +9,10 @@ namespace IntegratedWorkflowLibrary.Models
         /// <summary>
         /// ID of the AccessEntityType: 1=Report Group,2=Job Title,3=Employee,4=UserConnectingFieldID
         /// </summary>
-        int ID;
+        public int ID { get; set; }
         /// <summary>
         /// Name of AccessEntityType
         /// </summary>
-        string Title;
+        public string Title { get; set; }
     }
 }

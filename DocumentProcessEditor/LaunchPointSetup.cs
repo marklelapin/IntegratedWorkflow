@@ -28,7 +28,7 @@ namespace DocumentProcessEditor
         private void PopulateList()
         {
             LaunchPointListBox.DataSource = GlobalConfig.Connection.GetLaunchPoints();
-            LaunchPointListBox.DisplayMember = "Title";
+            LaunchPointListBox.DisplayMember = "DisplayName";
         }
 
        

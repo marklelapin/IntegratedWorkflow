@@ -57,13 +57,27 @@ namespace IntegratedWorkflowLibrary.DataAccess
             }
         }
 
+        public List<AccessEntityModel> GetAccessEntities(int accessEntityTypeID)
+        {
+            List<AccessEntityModel> output;
+            var dp = new DynamicParameters();
+
+            using (IDbConnection connection = new SqlConnection(CnnString))
+            {
+                dp.Add ("@AccessEntityTypeID",accessEntityTypeID);
+                output = connection.Query<AccessEntityModel>("spAccessEntityGet", dp, commandType: CommandType.StoredProcedure).ToList();
+            }
+            return output;
+        }
+
+       
         public List<AccessEntityTypeModel> GetAccessEntityTypes()
         {
             List<AccessEntityTypeModel> output;
 
             using (IDbConnection connection = new SqlConnection(CnnString))
             {
-                output = connection.Query<AccessEntityTypeModel>("Select ID,Title FROM dbo.AccessEntityTypes").ToList();
+                output = connection.Query<AccessEntityTypeModel>("spAccessEntityTypeGet",commandType: CommandType.StoredProcedure).ToList();
             }
             return output;
         }
@@ -75,26 +89,26 @@ namespace IntegratedWorkflowLibrary.DataAccess
 
             using (IDbConnection connection = new SqlConnection(CnnString))
             {
-                output = connection.Query<AccessTypeModel>("SELECT ID,Title,AllowView,AllowEdit,AllowDownwards,AllowMatch FROM dbo.AccessTypes").ToList();
+                output = connection.Query<AccessTypeModel>("spAccessTypeGet", commandType: CommandType.StoredProcedure).ToList();
             }
 
             return output;
         }
 
-        public List<AccessEntityModel> GetDocumentProcessAccessEntities(int documentProcessID)
+        public List<AccessRuleModel> GetDocumentProcessAccessRules(int documentProcessID)
         {
-            List<AccessEntityModel> output;
+            List<AccessRuleModel> output;
             var dp = new DynamicParameters();
 
             using (IDbConnection connection = new SqlConnection(CnnString))
             {
                 dp.Add("@DocumentProcessID", documentProcessID);
-                output = connection.Query<AccessEntityModel>("dbo.spDocumentProcessAccessEntityGet", dp,commandType:CommandType.StoredProcedure).ToList();
+                output = connection.Query<AccessRuleModel>("dbo.spDocumentProcessAccessRulesGet", dp, commandType: CommandType.StoredProcedure).ToList();
             }
 
             return output;
-        
-         }
+
+        }
 
         public List<LaunchPointModel> GetDocumentProcessLaunchPoints(int documentProcessID)
         {
@@ -150,5 +164,25 @@ namespace IntegratedWorkflowLibrary.DataAccess
 
             return output;
         }
+
+        public DocumentProcessModel UpdateDocumentProcess(DocumentProcessModel model)
+        {
+            var dp = new DynamicParameters();
+
+            using (IDbConnection connection = new SqlConnection(CnnString))
+            {
+                dp.Add("@DocumentProcessID", model.ID);
+                dp.Add("@Title", model.Title);
+                dp.Add("@IsActive", model.IsActive);
+                dp.Add("@AccessInformation", model.AccessInformation);
+                dp.Add("@ObjectInformation", model.ObjectInformation);
+                dp.Add("@LaunchPointInformation", model.LaunchPointInformation);
+
+                connection.Execute("dbo.spDocumentProcessUpdate", dp, commandType: CommandType.StoredProcedure);
+            }
+
+            return model;
+        }
     }
 }
+

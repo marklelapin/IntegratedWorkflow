@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,7 +20,7 @@ namespace DocumentProcessEditor
         /// <summary>
         /// The currently selected DocumentProcessID
         /// </summary>
-        public DocumentProcessModel SelectedDocumentProcess = new DocumentProcessModel();
+        private DocumentProcessModel SelectedDocumentProcess = new DocumentProcessModel();
         /// <summary>
       /// The current Launch Points that should appear in the Listbox
       /// </summary>
@@ -27,7 +28,7 @@ namespace DocumentProcessEditor
        /// <summary>
        /// The current Access Entities that should appear in the Listbox
        /// </summary>
-        private List<AccessEntityModel> AccessEntities = new List<AccessEntityModel>();
+        private List<AccessRuleModel> AccessRules = new List<AccessRuleModel>();
         /// <summary>
         /// The current Document Process Objects that should appear in the Listbox
         /// </summary>
@@ -36,8 +37,12 @@ namespace DocumentProcessEditor
         private string searchText = "";
 
         private bool activeOnly = true;
-       
 
+        private bool changesMade = false;
+        /// <summary>
+        /// The index int the DocumentProcessListbox most recently selected
+        /// </summary>
+        private int currentDocumentProcessIndex = 1;
         
 
         public DocumentProcessEditor()
@@ -54,12 +59,12 @@ namespace DocumentProcessEditor
         private void updateRightHandSideFromDataConnection()
         {
             LaunchPoints = GlobalConfig.Connection.GetDocumentProcessLaunchPoints(SelectedDocumentProcess.ID);
-            AccessEntities = GlobalConfig.Connection.GetDocumentProcessAccessEntities(SelectedDocumentProcess.ID);
+            AccessRules = GlobalConfig.Connection.GetDocumentProcessAccessRules(SelectedDocumentProcess.ID);
             DocumentProcessObjects = GlobalConfig.Connection.GetDocumentProcessObjects(SelectedDocumentProcess.ID);
 
             updateLaunchPointsListBox();
 
-            updateAccessListBox();
+            updateAccessRulesListBox();
 
             updateObjectListBox();
 
@@ -67,6 +72,7 @@ namespace DocumentProcessEditor
             DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
             IsActiveCheckBox.Checked = SelectedDocumentProcess.IsActive;
             DocumentProcessNameErrorMessage.Text = "";
+            changesMade = false;
         }
 
 
@@ -74,15 +80,15 @@ namespace DocumentProcessEditor
         {
             LaunchPointsListBox.DataSource = null;
             LaunchPointsListBox.DataSource = LaunchPoints;
-            LaunchPointsListBox.DisplayMember = "Title";
+            LaunchPointsListBox.DisplayMember = "DisplayName";
         }
 
 
-        private void updateAccessListBox()
+        private void updateAccessRulesListBox()
         {
-            AccessListBox.DataSource = null;
-            AccessListBox.DataSource = AccessEntities;
-            AccessListBox.DisplayMember = "DisplayName";
+            AccessRulesListBox.DataSource = null;
+            AccessRulesListBox.DataSource = AccessRules;
+            AccessRulesListBox.DisplayMember = "DisplayName";
         }
 
         private void updateObjectListBox()
@@ -117,23 +123,31 @@ namespace DocumentProcessEditor
                 DocumentProcessNameErrorMessage.Visible = false;
                 DocumentProcessNameErrorMessage.Text = "";
 
-                
+                var jsonAccessInformation = JsonSerializer.Serialize(AccessRules);
+                var jsonLaunchPointInformation = JsonSerializer.Serialize(LaunchPoints);
 
+               
                 DocumentProcessModel model = new DocumentProcessModel(
-                                                                    SelectedDocumentProcessIDLabel.Text,
-                                                                    DocumentProcessNameTextBox.Text,
-                                                                    IsActiveCheckBox.Checked,
-                                                                    "",//TODO - add in access information from acces listbox
-                                                                    "",//TODO - add in object json from object listbox
-                                                                    ""//TODO - add in launchpoint info from lp listbox
-                                                                    );
+                                                                SelectedDocumentProcessIDLabel.Text,
+                                                                DocumentProcessNameTextBox.Text,
+                                                                IsActiveCheckBox.Checked,
+                                                                jsonAccessInformation,//TODO - add in access information from acces listbox
+                                                                "",//TODO - add in object json from object listbox
+                                                                jsonLaunchPointInformation//TODO - add in launchpoint info from lp listbox
+                                                                );
 
-                GlobalConfig.Connection.CreateDocumentProcess(model);               {
-                   
-                }
+                if (SelectedDocumentProcessIDLabel.Text == "0") //New DocumentProcess
+                    {
+                       GlobalConfig.Connection.CreateDocumentProcess(model);               
+                        MessageBox.Show("New Document Process Saved. " + model.ID + ": " + model.Title);
+                    }
+                 else
+                    {
+                        GlobalConfig.Connection.UpdateDocumentProcess(model);
+                        MessageBox.Show("Document Process Updated.");
+                    };
 
-
-                MessageBox.Show("New Document Process Saved. "+model.ID + ": "+ model.Title);
+                
                 
                 updateDocumentProcessListBox();
             }
@@ -188,14 +202,44 @@ namespace DocumentProcessEditor
             updateDocumentProcessListBox();
         }
 
-        private void DocumentProcessListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void SaveChanges()
         {
-            SelectedDocumentProcess = (DocumentProcessModel)DocumentProcessListBox.SelectedItem;
-            DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
-            SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
-            updateRightHandSideFromDataConnection();
+            ///TODO Save Changes 
         }
 
+        private void DocumentProcessListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DocumentProcessListBox.SelectedIndex != currentDocumentProcessIndex) //This avoids the function acting twice after SelectedIndex changed = currentDocumentProcessIndex in 'Yes' part of following If statement
+            {
+                if (changesMade)
+                {
+                    DialogResult userCheck = MessageBox.Show("Changes have been made! Do you wish to go back and save changes?", "Changes Check", MessageBoxButtons.YesNo);
+                    if (userCheck == DialogResult.Yes)
+                    {
+                        DocumentProcessListBox.SelectedIndex = currentDocumentProcessIndex;
+                       
+                    }
+                    else if (userCheck == DialogResult.No)
+                    {
+                        ChangeDocumentProcess();
+                    }
+                }
+                else ChangeDocumentProcess();         
+            }
+
+        }
+
+        private void ChangeDocumentProcess()
+        {
+               SelectedDocumentProcess = (DocumentProcessModel)DocumentProcessListBox.SelectedItem;
+               currentDocumentProcessIndex = DocumentProcessListBox.SelectedIndex;
+               DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
+               SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
+               
+                updateRightHandSideFromDataConnection();
+        }
+                     
+                    
         private void DocumentProcessNameTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             ValidateName();
@@ -210,11 +254,20 @@ namespace DocumentProcessEditor
         {
             LaunchPointSetup childForm = new LaunchPointSetup();
             childForm.ShowDialog();
-                            
-            LaunchPoints.AddRange(childForm.SelectedLaunchPoints);
+            
+           
+            foreach (LaunchPointModel lp in childForm.SelectedLaunchPoints)
+            {
+                if (!LaunchPoints.Exists(x => x.ID == lp.ID)) 
+                {
+                    LaunchPoints.Add(lp);
+                }
+            }
+           
 
             updateLaunchPointsListBox();
 
+            changesMade = true;
         }
 
         private void RemoveLaunchPointButton_Click(object sender, EventArgs e)
@@ -224,6 +277,49 @@ namespace DocumentProcessEditor
             LaunchPoints.Remove(selectedLaunchPoint);
 
             updateLaunchPointsListBox();
+
+            changesMade = true;
         }
+
+        private void AddAccessEntityButton_Click(object sender, EventArgs e)
+        {
+            AccessSetup childForm = new AccessSetup();
+            childForm.ShowDialog();
+
+            if (childForm.SelectedAccessType.ID != null)
+            {
+            //  This section is needed as couldn't great a parametised constructor for AccessRuleModel as Dapper didn't like it when getting accessrulemodel from sql
+            AccessRuleModel newAccessRule = new AccessRuleModel();
+            newAccessRule.AccessTypeID = childForm.SelectedAccessType.ID;
+            newAccessRule.AccessTypeTitle = childForm.SelectedAccessType.Title;
+            newAccessRule.AccessEntityTypeID = childForm.SelectedAccessEntityType.ID;
+            newAccessRule.AccessEntityTypeTitle = childForm.SelectedAccessEntityType.Title;
+            newAccessRule.AccessEntityID = childForm.SelectedAccessEntity.ID;
+            newAccessRule.AccessEntityName = childForm.SelectedAccessEntity.Name;
+
+            AccessRules.Add(newAccessRule);
+
+
+            updateAccessRulesListBox();
+            
+            changesMade = true;
+            }
+            
+            
+        
+        }
+
+        private void RemoveAccessEntityButton_Click(object sender, EventArgs e)
+        {
+            AccessRuleModel selectedAccessRule = (AccessRuleModel)AccessRulesListBox.SelectedItem;
+
+            AccessRules.Remove(selectedAccessRule);
+
+            updateAccessRulesListBox();
+
+            changesMade = true;
+        }
+
+
     }
 }
