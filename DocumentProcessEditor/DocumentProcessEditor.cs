@@ -201,7 +201,6 @@ namespace DocumentProcessEditor
             {
                 GlobalConfig.Connection.CreateDocumentProcess(model);
                 MessageBox.Show("New Document Process Saved. " + model.ID + ": " + model.Title);
-                changesMade = false;
             }
             else
             {
@@ -209,7 +208,7 @@ namespace DocumentProcessEditor
                 MessageBox.Show("Document Process Updated.");
             };
 
-            
+            changesMade = false;
            
         }
 
