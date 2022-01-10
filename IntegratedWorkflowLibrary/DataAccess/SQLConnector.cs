@@ -150,6 +150,18 @@ namespace IntegratedWorkflowLibrary.DataAccess
             return output;
         }
 
+        public List<ObjectTypeModel> GetObjectTypes()
+        {
+            List<ObjectTypeModel> output;
+
+            using (IDbConnection connection = new SqlConnection(CnnString))
+            {
+                output = connection.Query<ObjectTypeModel>("dbo.spObjectTypeGet").ToList();
+            }
+
+            return output;
+        }
+
         public List<DocumentProcessModel> SearchDocumentProcesses(string searchText, bool activeOnly)
         {
             List<DocumentProcessModel> output;

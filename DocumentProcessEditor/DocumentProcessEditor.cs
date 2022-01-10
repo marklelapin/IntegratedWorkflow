@@ -345,6 +345,25 @@ namespace DocumentProcessEditor
             changesMade = true;
         }
 
+        private void AddObjectButton_Click(object sender, EventArgs e)
+        {
+            ObjectSelection childForm = new ObjectSelection();
+            childForm.ShowDialog();
 
+
+
+            if (childForm.NewObject.ObjectTypeID > 0) //should indicate that an object has been filled
+            {
+                
+                //  This section is needed as couldn't great a parametised constructor for AccessRuleModel as Dapper didn't like it when getting accessrulemodel from sql
+                DocumentProcessObjectModel model = new DocumentProcessObjectModel();
+                model.Title = childForm.NewObject.Title;
+                model.ObjectTypeID = childForm.NewObject.ObjectTypeID;
+                model.ObjectTypeName = childForm.NewObject.ObjectTypeTitle;
+                model.Information = childForm.NewObject.Information;
+
+                DocumentProcessObjects.Add(model);
+            }
+        }
     }
 }

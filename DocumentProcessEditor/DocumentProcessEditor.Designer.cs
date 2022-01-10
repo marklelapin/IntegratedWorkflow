@@ -345,6 +345,7 @@ namespace DocumentProcessEditor
             this.AddObjectButton.TabIndex = 13;
             this.AddObjectButton.Text = "Add";
             this.AddObjectButton.UseVisualStyleBackColor = false;
+            this.AddObjectButton.Click += new System.EventHandler(this.AddObjectButton_Click);
             // 
             // AccessRulesListBox
             // 

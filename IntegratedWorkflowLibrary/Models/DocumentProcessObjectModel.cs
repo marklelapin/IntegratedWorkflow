@@ -16,11 +16,11 @@ namespace IntegratedWorkflowLibrary.Models
         /// <summary>
         /// the Type of Object it is i.e Date Field, Category Field, Email, Text, Yes/No
         /// </summary>
-        public int DocumentProcessObjectTypeID { get; set; }
+        public int ObjectTypeID { get; set; }
         /// <summary>
         /// the Type of Object it is i.e Date Field, Category Field, Email, Text, Yes/No
         /// </summary>
-        public string DocumentProcessObjectTypeName { get; set; }
+        public string ObjectTypeName { get; set; }
         /// <summary>
         /// Name of the Object that will appear on forms etc
         /// </summary>
@@ -38,7 +38,7 @@ namespace IntegratedWorkflowLibrary.Models
         {
             get
             {
-                return $"{DocumentProcessObjectTypeName}: {Title}";
+                return $"{ObjectTypeName}: {Title}";
             }
         }
     }

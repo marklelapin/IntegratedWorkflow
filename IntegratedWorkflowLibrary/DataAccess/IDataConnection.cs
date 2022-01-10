@@ -81,5 +81,11 @@ namespace IntegratedWorkflowLibrary.DataAccess
         /// <returns></returns>
         List<AccessEntityModel> GetAccessEntities(int accessEntityTypeID);
 
+        /// <summary>
+        /// Retrieves all of the available Object Types to associated with Document Process from database
+        /// </summary>
+        /// <returns></returns>
+        List<ObjectTypeModel> GetObjectTypes();
+
     }
 }
