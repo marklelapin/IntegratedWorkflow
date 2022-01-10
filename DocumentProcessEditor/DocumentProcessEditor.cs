@@ -46,13 +46,18 @@ namespace DocumentProcessEditor
         /// <summary>
         /// signals whether the DocumentProcess ListBox is in the process of updating and there doesn't wnat the select change event to occur.
         /// </summary>
-        private bool updateListBoxInProgress = false;
+        private bool justSaved = false;
+        /// <summary>
+        /// If currentlySearching = false it will ignore the processes to run on select change event in Document Process List box
+        /// </summary>
+        private bool currentlySearching = false;
 
         public DocumentProcessEditor()
         {
             InitializeComponent();
 
             updateDocumentProcessListBox();
+            DocumentProcessListBox.SelectedIndex = 0;
             updateRightHandSideFromDataConnection();
 
         }
@@ -61,6 +66,7 @@ namespace DocumentProcessEditor
         /// </summary>
         private void updateRightHandSideFromDataConnection()
         {
+            
             LaunchPoints = GlobalConfig.Connection.GetDocumentProcessLaunchPoints(SelectedDocumentProcess.ID);
             AccessRules = GlobalConfig.Connection.GetDocumentProcessAccessRules(SelectedDocumentProcess.ID);
             DocumentProcessObjects = GlobalConfig.Connection.GetDocumentProcessObjects(SelectedDocumentProcess.ID);
@@ -70,10 +76,20 @@ namespace DocumentProcessEditor
             updateAccessRulesListBox();
 
             updateObjectListBox();
-
-            SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
-            DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
-            IsActiveCheckBox.Checked = SelectedDocumentProcess.IsActive;
+    
+            if (SelectedDocumentProcess.ID == null)
+            {
+                DocumentProcessNameTextBox.Text = "";
+                SelectedDocumentProcessIDLabel.Text = "---";
+            }
+            else
+            {
+                DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
+                SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
+                IsActiveCheckBox.Checked = SelectedDocumentProcess.IsActive;
+            };
+              
+            
             DocumentProcessNameErrorMessage.Text = "";
             changesMade = false;
         }
@@ -107,7 +123,7 @@ namespace DocumentProcessEditor
         /// </summary>
         private void updateDocumentProcessListBox()
         {
-      
+            DocumentProcessListBox.DataSource = null;            
             DocumentProcessListBox.DataSource = GlobalConfig.Connection.SearchDocumentProcesses(searchText, activeOnly);
             DocumentProcessListBox.DisplayMember = "DisplayName";
            
@@ -130,7 +146,6 @@ namespace DocumentProcessEditor
                 DocumentProcessNameErrorMessage.Text = "";
 
                 SaveChanges();
-          
             }
             else
             {
@@ -174,13 +189,17 @@ namespace DocumentProcessEditor
         private void ActiveOnlyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             activeOnly = ActiveOnlyCheckBox.Checked;
+            currentlySearching = true;
             updateDocumentProcessListBox();
+            currentlySearching = false;
         }
 
         private void SearchTextbox_KeyUp(object sender, KeyEventArgs e)
         {
             searchText = SearchTextbox.Text;
+            currentlySearching = true;
             updateDocumentProcessListBox();
+            currentlySearching = false;
         }
 
         private void SaveChanges()
@@ -209,12 +228,15 @@ namespace DocumentProcessEditor
             };
 
             changesMade = false;
-           
+            justSaved = true; //avoids updateDocumentProcessListBox getting confused by lots of different selection changes
+            updateDocumentProcessListBox();
+            justSaved = false;
         }
 
         private void DocumentProcessListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DocumentProcessListBox.SelectedIndex != currentDocumentProcessIndex) //This avoids the function acting twice after SelectedIndex changed = currentDocumentProcessIndex in 'Yes' part of following If statement
+            
+            if ((DocumentProcessListBox.SelectedIndex != currentDocumentProcessIndex) & (justSaved== false) & (currentlySearching == false))//This avoids the function acting twice after SelectedIndex changed = currentDocumentProcessIndex in 'Yes' part of following If statement
             {
                 if (changesMade)
                 {
@@ -238,10 +260,9 @@ namespace DocumentProcessEditor
         {
                SelectedDocumentProcess = (DocumentProcessModel)DocumentProcessListBox.SelectedItem;
                currentDocumentProcessIndex = DocumentProcessListBox.SelectedIndex;
-               DocumentProcessNameTextBox.Text = SelectedDocumentProcess.Title;
-               SelectedDocumentProcessIDLabel.Text = SelectedDocumentProcess.ID.ToString();
-            updateListBoxInProgress = false;
-                updateRightHandSideFromDataConnection();
+                        
+                updateRightHandSideFromDataConnection();          
+                
         }
                      
                     

@@ -28,7 +28,7 @@ namespace IntegratedWorkflowLibrary.DataAccess
                 dp.Add("IsACtive", model.IsActive);
                 dp.Add("@AccessInformation", model.AccessInformation);
                 dp.Add("@ObjectInformation", model.ObjectInformation);
-                dp.Add("@LaunchPointInformation", model.ObjectInformation);
+                dp.Add("@LaunchPointInformation", model.LaunchPointInformation);
                 dp.Add("@ID", 0, dbType: DbType.Int32, direction: ParameterDirection.Output); //returns the newly created ID from spDocumentProcessCreate
 
                 connection.Execute("dbo.spDocumentProcessCreate", dp, commandType: CommandType.StoredProcedure);
