@@ -43,6 +43,8 @@ namespace DocumentProcessEditor
         /// The index int the DocumentProcessListbox most recently selected
         /// </summary>
         private int currentDocumentProcessIndex = 1;
+
+
         /// <summary>
         /// signals whether the DocumentProcess ListBox is in the process of updating and there doesn't wnat the select change event to occur.
         /// </summary>
@@ -77,7 +79,7 @@ namespace DocumentProcessEditor
 
             updateObjectListBox();
     
-            if (SelectedDocumentProcess.ID == null)
+            if (SelectedDocumentProcess.ID == 0)
             {
                 DocumentProcessNameTextBox.Text = "";
                 SelectedDocumentProcessIDLabel.Text = "---";
@@ -112,9 +114,18 @@ namespace DocumentProcessEditor
 
         private void updateObjectListBox()
         {
+
+            //records sort order and places into DocumentProcessobjects.
+            for (int index = 0; index < DocumentProcessObjects.Count; index++)
+            {
+                DocumentProcessObjects[index].SortOrder = index + 1;
+                DocumentProcessObjects[index].DocumentProcessID = SelectedDocumentProcess.ID;
+            }
+
             ObjectListBox.DataSource = null;
             ObjectListBox.DataSource = DocumentProcessObjects;
             ObjectListBox.DisplayMember = "DisplayName";
+
         }
 
 
@@ -206,14 +217,15 @@ namespace DocumentProcessEditor
         {
             var jsonAccessInformation = JsonSerializer.Serialize(AccessRules);
             var jsonLaunchPointInformation = JsonSerializer.Serialize(LaunchPoints);
+            var jsonObjectsInformation = JsonSerializer.Serialize(DocumentProcessObjects);
 
             DocumentProcessModel model = new DocumentProcessModel(
                                                             SelectedDocumentProcessIDLabel.Text,
                                                             DocumentProcessNameTextBox.Text,
                                                             IsActiveCheckBox.Checked,
-                                                            jsonAccessInformation,//TODO - add in access information from acces listbox
-                                                            "[]",//TODO - add in object json from object listbox
-                                                            jsonLaunchPointInformation//TODO - add in launchpoint info from lp listbox
+                                                            jsonAccessInformation,
+                                                            jsonObjectsInformation,
+                                                            jsonLaunchPointInformation
                                                             );
 
             if (SelectedDocumentProcessIDLabel.Text == "0") //New DocumentProcess
@@ -352,7 +364,7 @@ namespace DocumentProcessEditor
 
 
 
-            if (childForm.NewObject.ObjectTypeID > 0) //should indicate that an object has been filled
+            if (!(childForm.NewObject ==  null)) //should indicate that an object has been filled
             {
                 
                 //  This section is needed as couldn't great a parametised constructor for AccessRuleModel as Dapper didn't like it when getting accessrulemodel from sql
@@ -364,6 +376,89 @@ namespace DocumentProcessEditor
 
                 DocumentProcessObjects.Add(model);
             }
+
+            updateObjectListBox();
+
+            changesMade = true;
         }
+
+
+
+        ////Code to change sort order of ObjectsListBox using Drag and Drop
+        //private void ObjectListBox_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    Point mousePoint = ObjectListBox.PointToClient(new Point(e.X, e.Y));
+        //    int dragFromIndex = ObjectListBox.IndexFromPoint(mousePoint);
+        //    if (dragFromIndex < 0) return;
+            
+        //    ObjectListBox.DoDragDrop(ObjectListBox.Items[dragFromIndex], DragDropEffects.Move);
+        //}
+
+        //private void ObjectListBox_DragOver(object sender, DragEventArgs e)
+        //{
+        //    e.Effect = DragDropEffects.Move;
+        //}
+
+        //private void ObjectListBox_DragDrop(object sender, DragEventArgs e)
+        //{
+        //    Point mousePoint = ObjectListBox.PointToClient(new Point(e.X, e.Y));
+        //    int dragToIndex = ObjectListBox.IndexFromPoint(mousePoint);
+        //    if (dragToIndex < 0) dragToIndex = ObjectListBox.Items.Count - 1; //if item has been dragged below last member of list then put it at the bottom
+        //    Object draggedObject = e.Data.GetData(typeof(DocumentProcessObjectModel));
+        //    ObjectListBox.Items.Remove(draggedObject);
+        //    ObjectListBox.Items.Insert(dragToIndex, draggedObject);
+
+        //    changesMade = true;
+        //}
+
+        private void RemoveObjectButton_Click(object sender, EventArgs e)
+        {
+            DocumentProcessObjectModel selectedObject = (DocumentProcessObjectModel)ObjectListBox.SelectedItem;
+
+            DocumentProcessObjects.Remove(selectedObject);
+
+            updateObjectListBox();
+
+            changesMade = true;
+        }
+
+        private void UpButton_Click(object sender, EventArgs e)
+        {
+            DocumentProcessObjectModel selectedObject = (DocumentProcessObjectModel)ObjectListBox.SelectedItem;
+
+            int indexTo = ObjectListBox.SelectedIndex - 1;
+
+            if (indexTo < 0) return;//top of list
+
+            DocumentProcessObjects.Remove(selectedObject);
+            DocumentProcessObjects.Insert(indexTo, selectedObject);
+
+            updateObjectListBox();
+
+            ObjectListBox.SelectedIndex = indexTo;
+
+            changesMade = true;
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            DocumentProcessObjectModel selectedObject = (DocumentProcessObjectModel)ObjectListBox.SelectedItem;
+            
+
+            int indexTo = ObjectListBox.SelectedIndex + 1;
+
+            if (indexTo > ObjectListBox.Items.Count - 1) return;//bottom of list
+
+            DocumentProcessObjects.Remove(selectedObject);
+            DocumentProcessObjects.Insert(indexTo, selectedObject);
+
+            updateObjectListBox();
+
+            ObjectListBox.SelectedIndex = indexTo;
+
+            changesMade = true;
+        }
+
+
     }
 }

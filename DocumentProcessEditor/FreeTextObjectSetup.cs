@@ -46,7 +46,7 @@ namespace DocumentProcessEditor
 
                 //test for max length integer
                 output = int.TryParse(MaxLengthTextBox.Text, out maxLength);
-                if (output)
+                if (output == false)
                 {
                     MessageBox.Show("Max Length must be an integer");
                 }

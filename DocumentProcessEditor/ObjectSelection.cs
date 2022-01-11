@@ -19,6 +19,7 @@ namespace DocumentProcessEditor
         public ObjectSelection()
         {
             InitializeComponent();
+            populateObjectTypeListBox();
         }
 
         private void populateObjectTypeListBox()

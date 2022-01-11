@@ -41,6 +41,9 @@ namespace DocumentProcessEditor
             this.SeachLabel = new System.Windows.Forms.Label();
             this.AccessRulesLabel = new System.Windows.Forms.Label();
             this.DocumentProcessGroup = new System.Windows.Forms.GroupBox();
+            this.DownButton = new System.Windows.Forms.Button();
+            this.UpButton = new System.Windows.Forms.Button();
+            this.EditObjectButton = new System.Windows.Forms.Button();
             this.DocumentProcessNameErrorMessage = new System.Windows.Forms.Label();
             this.SelectedDocumentProcessIDLabel = new System.Windows.Forms.Label();
             this.CancelChangesButton = new System.Windows.Forms.Button();
@@ -114,12 +117,13 @@ namespace DocumentProcessEditor
             RemoveObjectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             RemoveObjectButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             RemoveObjectButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            RemoveObjectButton.Location = new System.Drawing.Point(211, 75);
+            RemoveObjectButton.Location = new System.Drawing.Point(161, 75);
             RemoveObjectButton.Name = "RemoveObjectButton";
             RemoveObjectButton.Size = new System.Drawing.Size(61, 23);
             RemoveObjectButton.TabIndex = 28;
             RemoveObjectButton.Text = "Remove";
             RemoveObjectButton.UseVisualStyleBackColor = false;
+            RemoveObjectButton.Click += new System.EventHandler(this.RemoveObjectButton_Click);
             // 
             // DocumentProcessListBox
             // 
@@ -143,13 +147,14 @@ namespace DocumentProcessEditor
             // 
             // ObjectListBox
             // 
+            this.ObjectListBox.AllowDrop = true;
             this.ObjectListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ObjectListBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ObjectListBox.FormattingEnabled = true;
             this.ObjectListBox.ItemHeight = 17;
             this.ObjectListBox.Location = new System.Drawing.Point(6, 101);
             this.ObjectListBox.Name = "ObjectListBox";
-            this.ObjectListBox.Size = new System.Drawing.Size(266, 342);
+            this.ObjectListBox.Size = new System.Drawing.Size(266, 325);
             this.ObjectListBox.TabIndex = 2;
             // 
             // SearchTextbox
@@ -189,6 +194,9 @@ namespace DocumentProcessEditor
             // 
             // DocumentProcessGroup
             // 
+            this.DocumentProcessGroup.Controls.Add(this.DownButton);
+            this.DocumentProcessGroup.Controls.Add(this.UpButton);
+            this.DocumentProcessGroup.Controls.Add(this.EditObjectButton);
             this.DocumentProcessGroup.Controls.Add(RemoveObjectButton);
             this.DocumentProcessGroup.Controls.Add(RemoveAccessEntityButton);
             this.DocumentProcessGroup.Controls.Add(RemoveLaunchPointButton);
@@ -215,6 +223,50 @@ namespace DocumentProcessEditor
             this.DocumentProcessGroup.TabIndex = 10;
             this.DocumentProcessGroup.TabStop = false;
             this.DocumentProcessGroup.Text = "Selected Document Process: ";
+            // 
+            // DownButton
+            // 
+            this.DownButton.BackColor = System.Drawing.Color.White;
+            this.DownButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.DownButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DownButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DownButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.DownButton.Location = new System.Drawing.Point(211, 431);
+            this.DownButton.Name = "DownButton";
+            this.DownButton.Size = new System.Drawing.Size(61, 23);
+            this.DownButton.TabIndex = 32;
+            this.DownButton.Text = "Down";
+            this.DownButton.UseVisualStyleBackColor = false;
+            this.DownButton.Click += new System.EventHandler(this.DownButton_Click);
+            // 
+            // UpButton
+            // 
+            this.UpButton.BackColor = System.Drawing.Color.White;
+            this.UpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.UpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.UpButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.UpButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.UpButton.Location = new System.Drawing.Point(144, 431);
+            this.UpButton.Name = "UpButton";
+            this.UpButton.Size = new System.Drawing.Size(61, 23);
+            this.UpButton.TabIndex = 31;
+            this.UpButton.Text = "Up";
+            this.UpButton.UseVisualStyleBackColor = false;
+            this.UpButton.Click += new System.EventHandler(this.UpButton_Click);
+            // 
+            // EditObjectButton
+            // 
+            this.EditObjectButton.BackColor = System.Drawing.Color.White;
+            this.EditObjectButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.EditObjectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EditObjectButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.EditObjectButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.EditObjectButton.Location = new System.Drawing.Point(228, 75);
+            this.EditObjectButton.Name = "EditObjectButton";
+            this.EditObjectButton.Size = new System.Drawing.Size(44, 23);
+            this.EditObjectButton.TabIndex = 30;
+            this.EditObjectButton.Text = "Edit";
+            this.EditObjectButton.UseVisualStyleBackColor = false;
             // 
             // DocumentProcessNameErrorMessage
             // 
@@ -339,7 +391,7 @@ namespace DocumentProcessEditor
             this.AddObjectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddObjectButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.AddObjectButton.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.AddObjectButton.Location = new System.Drawing.Point(161, 75);
+            this.AddObjectButton.Location = new System.Drawing.Point(111, 75);
             this.AddObjectButton.Name = "AddObjectButton";
             this.AddObjectButton.Size = new System.Drawing.Size(44, 23);
             this.AddObjectButton.TabIndex = 13;
@@ -435,6 +487,9 @@ namespace DocumentProcessEditor
         private System.Windows.Forms.Label SelectedDocumentProcessIDLabel;
         private System.Windows.Forms.Label DocumentProcessNameErrorMessage;
         private System.Windows.Forms.CheckBox ActiveOnlyCheckBox;
+        private System.Windows.Forms.Button DownButton;
+        private System.Windows.Forms.Button UpButton;
+        private System.Windows.Forms.Button EditObjectButton;
     }
 }
 
