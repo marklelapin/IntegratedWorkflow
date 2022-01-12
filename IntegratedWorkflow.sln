@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentProcessEditor", "Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegratedWorkflowLibrary", "IntegratedWorkflowLibrary\IntegratedWorkflowLibrary.csproj", "{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegratedWorkflowWebUI", "IntegratedWorkflowWebUI\IntegratedWorkflowWebUI.csproj", "{AD540D43-14B4-4659-9CC3-E9515377C0B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8C737B3-F0F1-4D1A-A316-63AF2EFB27D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD540D43-14B4-4659-9CC3-E9515377C0B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD540D43-14B4-4659-9CC3-E9515377C0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD540D43-14B4-4659-9CC3-E9515377C0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD540D43-14B4-4659-9CC3-E9515377C0B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

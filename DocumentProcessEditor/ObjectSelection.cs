@@ -28,6 +28,7 @@ namespace DocumentProcessEditor
             ObjectTypeListBox.DisplayMember = "Title";
         }
 
+
         private void OKButton_Click(object sender, EventArgs e)
         {
             ObjectTypeModel selectedObjectTypeModel = (ObjectTypeModel)ObjectTypeListBox.SelectedItem;

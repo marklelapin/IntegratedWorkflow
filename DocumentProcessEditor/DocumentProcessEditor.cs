@@ -459,6 +459,9 @@ namespace DocumentProcessEditor
             changesMade = true;
         }
 
-
+        private void EditObjectButton_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException(); //TODO Editing of document process- needs to reuse code within Object Selection Form
+        }
     }
 }

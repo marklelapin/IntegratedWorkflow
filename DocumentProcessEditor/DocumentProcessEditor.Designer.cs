@@ -267,6 +267,7 @@ namespace DocumentProcessEditor
             this.EditObjectButton.TabIndex = 30;
             this.EditObjectButton.Text = "Edit";
             this.EditObjectButton.UseVisualStyleBackColor = false;
+            this.EditObjectButton.Click += new System.EventHandler(this.EditObjectButton_Click);
             // 
             // DocumentProcessNameErrorMessage
             // 
